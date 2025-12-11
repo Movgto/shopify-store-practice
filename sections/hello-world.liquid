@@ -14,7 +14,18 @@
   class="products-heading"
 >{{ section.settings.best_products_heading }}</h2>
 
-<div class="highlights">
+<div class="featured-products">
+  {% assign collection_handle = section.settings.best_products_collection %}
+  {% if collection_handle != blank %}
+    {% assign collection = collections[collection_handle] %}
+    {% if collection != nil %}
+      {% render 'product-grid', collection: collection, limit: 3 %}
+    {% else %}
+      <p>No collection found with the handle '{{ collection_handle }}'.</p>
+    {% endif %}
+  {% else %}
+    <p>Please select a collection in the section settings.</p>
+  {% endif %}
   
 </div>
 
@@ -131,6 +142,12 @@
     {
       "name": "Hello World Template",
       "category": "Demo"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "highlight",
+      "name": "Highlight"
     }
   ]
 }

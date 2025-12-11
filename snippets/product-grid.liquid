@@ -1,0 +1,124 @@
+{% doc %}
+  Renders a grid of products from a collection.
+
+  @param {collection} collection - The collection object to display products from
+  @param {number} [limit] - Maximum number of products to display (optional)
+
+  @example
+  {% render 'product-grid', collection: collection, limit: 3 %}
+{% enddoc %}
+
+{% liquid
+  assign product_limit = limit | default: collection.products.size
+%}
+
+<div class="product-grid">
+  {% for product in collection.products limit: product_limit %}
+    <div class="product-card">
+      {% if product.featured_image %}
+        <a href="{{ product.url }}" class="product-card__image">
+          {{ product.featured_image | image_url: width: 400 | image_tag: alt: product.title }}
+        </a>
+      {% endif %}
+      
+      <div class="product-card__info">
+        <h3 class="product-card__title">
+          <a href="{{ product.url }}">{{ product.title }}</a>
+        </h3>
+        
+        <p class="product-card__price">
+          {{ product.price | money }}
+        </p>
+        
+        <a href="{{ product.url }}" class="product-card__button">
+          {{ 'products.view_details' | t | default: 'View Details' }}
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% stylesheet %}
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+  }
+
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .product-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .product-card__image {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 1;
+  }
+
+  .product-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .product-card:hover .product-card__image img {
+    transform: scale(1.05);
+  }
+
+  .product-card__info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .product-card__title {
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .product-card__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .product-card__title a:hover {
+    text-decoration: underline;
+  }
+
+  .product-card__price {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 0;
+    color: #333;
+  }
+
+  .product-card__button {
+    display: inline-block;
+    text-align: center;
+    padding: 0.75rem 1.5rem;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: auto;
+    transition: background-color 0.2s ease;
+  }
+
+  .product-card__button:hover {
+    background-color: #333;
+  }
+{% endstylesheet %}
