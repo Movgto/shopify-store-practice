@@ -1,0 +1,39 @@
+name: Deploy Theme
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli @shopify/theme
+        
+      - name: Deploy to Development Store
+        if: github.ref == 'refs/heads/develop'
+        env:
+          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_THEME_TOKEN }}
+          SHOPIFY_SHOP: ${{ secrets.SHOPIFY_DEV_STORE }}
+          DEV_THEME_ID: ${{ secrets.SHOPIFY_DEV_ID }}
+        run: |
+          shopify theme push --store=$SHOPIFY_SHOP --theme=$DEV_THEME_ID --allow-live
+          
+      - name: Deploy to Production Store
+        if: github.ref == 'refs/heads/main'
+        env:
+          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_THEME_TOKEN }}
+          SHOPIFY_SHOP: ${{ secrets.SHOPIFY_PROD_STORE }}
+          PROD_THEME_ID: ${{ secrets.SHOPIFY_PROD_ID }}
+        run: |
+          shopify theme push --store=$SHOPIFY_SHOP --theme=$PROD_THEME_ID --allow-live
