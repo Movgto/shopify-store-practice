@@ -22,18 +22,17 @@ jobs:
         
       - name: Deploy to Development Store
         if: github.ref == 'refs/heads/develop'
-        env:
-          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+        env:          
           SHOPIFY_SHOP: ${{ secrets.SHOPIFY_DEV_STORE }}
           DEV_THEME_ID: ${{ secrets.SHOPIFY_DEV_ID }}
         run: |
-          shopify theme push --store=$SHOPIFY_SHOP --theme=$DEV_THEME_ID --allow-live
+          shopify theme push --password=$DEV_THEME_TOKEN --store=$SHOPIFY_SHOP --theme=$DEV_THEME_ID --allow-live
           
       - name: Deploy to Production Store
         if: github.ref == 'refs/heads/main'
-        env:
-          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+        env:          
           SHOPIFY_SHOP: ${{ secrets.SHOPIFY_PROD_STORE }}
           PROD_THEME_ID: ${{ secrets.SHOPIFY_PROD_ID }}
         run: |
-          shopify theme push --store=$SHOPIFY_SHOP --theme=$PROD_THEME_ID --allow-live
+          shopify theme push --password=$PROD_THEME_TOKEN --store=$SHOPIFY_SHOP --theme=$PROD_THEME_ID --allow-live
+          
