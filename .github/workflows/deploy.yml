@@ -21,7 +21,7 @@ jobs:
         run: npm install -g @shopify/cli @shopify/theme
         
       - name: Deploy to Development Store
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/dev'
         env:
           DEV_STORE_ID: ${{ secrets.DEV_STORE_ID }}
           DEV_THEME_ID: ${{ secrets.DEV_THEME_ID }}
