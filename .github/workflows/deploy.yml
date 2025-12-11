@@ -21,18 +21,12 @@ jobs:
         run: npm install -g @shopify/cli @shopify/theme
         
       - name: Deploy to Development Store
-        if: github.ref == 'refs/heads/develop'
-        env:          
-          SHOPIFY_SHOP: ${{ secrets.SHOPIFY_DEV_STORE }}
-          DEV_THEME_ID: ${{ secrets.SHOPIFY_DEV_ID }}
+        if: github.ref == 'refs/heads/develop'        
         run: |
-          shopify theme push --password=$DEV_THEME_TOKEN --store=$SHOPIFY_SHOP --theme=$DEV_THEME_ID --allow-live
+          shopify theme push --password=$DEV_THEME_TOKEN --store=$SHOPIFY_DEV_STORE --theme=$SHOPIFY_DEV_ID --allow-live
           
       - name: Deploy to Production Store
-        if: github.ref == 'refs/heads/main'
-        env:          
-          SHOPIFY_SHOP: ${{ secrets.SHOPIFY_PROD_STORE }}
-          PROD_THEME_ID: ${{ secrets.SHOPIFY_PROD_ID }}
+        if: github.ref == 'refs/heads/main'       
         run: |
-          shopify theme push --password=$PROD_THEME_TOKEN --store=$SHOPIFY_SHOP --theme=$PROD_THEME_ID --allow-live
+          shopify theme push --password=$PROD_THEME_TOKEN --store=$SHOPIFY_PROD_STORE --theme=$SHOPIFY_PROD_ID --allow-live
           
