@@ -1,7 +1,13 @@
 <header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+  <div>
+    {% if shop.logo != blank %}
+      <a href="{{ routes.root_url }}">
+        <img width="24" height="24" src="{{ shop.logo | image_url: width: 24, height: 24 }}" alt="{{ shop.name }}" />
+      </a>
+    {% else %}
+      <a href="{{ routes.root_url }}" class="header__logo">{{ shop.name }}</a>
+    {% endif %}
+  </div>
 
   <div class="header__menu">
     {% for link in section.settings.menu.links %}
@@ -49,6 +55,13 @@
   header .header__icons {
     display: flex;
     gap: 1rem;
+  }
+
+  .header__logo {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.25rem;
   }
 {% endstylesheet %}
 
